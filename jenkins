@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/<username>/devops-lab.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'javac HelloWorld.java'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'java HelloWorld'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Example: copy compiled files to a deployment folder
+                sh 'mkdir -p /var/www/devops-app'
+                sh 'cp HelloWorld.class /var/www/devops-app/'
+            }
+        }
+    }
+}
