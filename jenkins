@@ -4,28 +4,25 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<username>/devops-lab.git'
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                sh 'javac HelloWorld.java'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'java HelloWorld'
+                sh 'python app.py'  // Replace with your build/test command
             }
         }
 
         stage('Deploy') {
             steps {
-                // Example: copy compiled files to a deployment folder
-                sh 'mkdir -p /var/www/devops-app'
-                sh 'cp HelloWorld.class /var/www/devops-app/'
+                sh 'cp app.py /var/www/html/app.py'
+                sh 'python /var/www/html/app.py'
             }
         }
+    }
+
+    triggers {
+        pollSCM('* * * * *')  // Optional: poll every minute
     }
 }
